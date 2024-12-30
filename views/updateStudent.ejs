@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Update Student</title>
+</head>
+<body>
+    <h1>Update Student</h1>
+    <form action="/students/edit/<%= student.sid %>" method="POST">
+        <label>Student ID: <input type="text" name="sid" value="<%= student.sid %>" readonly /></label><br/>
+        <label>Name: <input type="text" name="name" value="<%= student.name %>" required /></label><br/>
+        <label>Age: <input type="number" name="age" value="<%= student.age %>" min="18" required /></label><br/>
+        <button type="submit">Update</button>
+    </form>
+    <a href="/students">Back to Students</a>
+</body>
+</html>

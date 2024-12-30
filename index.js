@@ -29,3 +29,25 @@ app.get('/students', (req, res) => {
       });
 });
 
+//UPDATE STUDENT PAGE
+app.get('/students/edit/:sid', (req, res) => {
+    mySQLDAO.getStudentById(req.params.sid)
+        .then((student) => {
+            res.render('updateStudent', { student });
+        })
+        .catch((error) => {
+            res.send(error);
+        });
+});
+
+app.post('/students/edit/:sid', (req, res) => {
+    const { sid, name, age } = req.body;
+    mySQLDAO.updateStudent(sid, name, age)
+        .then(() => {
+            res.redirect('/students');
+        })
+        .catch((error) => {
+            res.render('updateStudent', { error: error.message, student: req.body });
+        });
+});
+
