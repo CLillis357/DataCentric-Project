@@ -2,9 +2,10 @@ var express = require('express');
 var bodyParser = require('body-parser');
 const { render } = require('express/lib/response');
 var mySQLDAO = require('./mySQLDAO');
-//var mongoDAO = require('./mongoDAO');
+var mongoDAO = require('./mongoDAO');
 var app = express();
 const port = 3004;
+
 
 
 app.listen(3004, () => {
@@ -65,8 +66,8 @@ app.post('/students/add', (req, res) => {
     // Initialize an array to store error messages
     const errors = [];
 
-    // Validate Student ID (4 digits)
-    const idCount = /^\d{4}$/;
+    // Validate Student ID (4 characters, letters or numbers)
+    const idCount = /^[A-Za-z0-9]{4}$/;
     if (!idCount.test(sid)) {
         errors.push('Student ID should be 4 digits.');
     }
@@ -141,6 +142,31 @@ app.get('/grades', (req, res) => {
             res.send(error);
         });
 });
+
+// LECTURERS PAGE
+
+//retrieves data from MongoDB to be displayed
+app.get('/lecturers', (req, res) => {
+    mongoDAO.getLecturers()
+        .then((lecturers) => {
+            res.render('showLecturers', { lecturers }); 
+        })
+        .catch((error) => {
+            res.send(`Error fetching lecturers: ${error.message}`);
+        });
+});
+
+//handles deleting a lecture from the Database
+app.get('/lecturers/delete/:lid', (req, res) => {
+    mongoDAO.deleteLecturer(req.params.lid)
+        .then(() => {
+            res.redirect('/lecturers');
+        })
+        .catch((error) => {
+            res.send(error.message);
+        });
+});
+
 
 
 
