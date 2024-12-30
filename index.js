@@ -131,6 +131,17 @@ app.get('/students/delete/:sid', (req, res) => {
         });
 });
 
+// GRADES PAGE
+app.get('/grades', (req, res) => {
+    mySQLDAO.getGrades()
+        .then((result) => {
+            res.render('showGrades', { grades: result });
+        })
+        .catch((error) => {
+            res.send(error);
+        });
+});
+
 
 
 

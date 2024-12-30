@@ -36,10 +36,25 @@ function deleteStudent(sid) {
     return pool.query('DELETE FROM student WHERE sid = ?', [sid]);
 }
 
+function getGrades() {
+    return pool.query(`
+        SELECT s.name AS studentName, 
+               m.name AS moduleName, 
+               g.grade
+        FROM student s
+        LEFT JOIN grade g ON s.sid = g.sid
+        LEFT JOIN module m ON g.mid = m.mid
+        ORDER BY s.name, g.grade`
+    );
+}
+
+
+
 module.exports = {
     getStudents,
     getStudentById,
     updateStudent,
     addStudent,
-    deleteStudent
+    deleteStudent,
+    getGrades
 };
