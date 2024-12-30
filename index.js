@@ -51,3 +51,70 @@ app.post('/students/edit/:sid', (req, res) => {
         });
 });
 
+
+
+//ADD STUDENT PAGE
+app.get('/students/add', (req, res) => {
+    res.render('addStudent', { errors: [], sid: '', name: '', age: '' });
+});
+
+
+app.post('/students/add', (req, res) => {
+    const { sid, name, age } = req.body;
+
+    // Initialize an array to store error messages
+    const errors = [];
+
+    // Validate Student ID (4 digits)
+    const idCount = /^\d{4}$/;
+    if (!idCount.test(sid)) {
+        errors.push('Student ID should be 4 digits.');
+    }
+
+    // Validate Name (letters only, minimum 2 characters)
+    const nameLetters = /^[A-Za-z\s]{2,}$/;
+    if (!nameLetters.test(name)) {
+        errors.push('Student Name should be at least 2 characters and contain letters only.');
+    }
+
+    // Validate Age (18 or older)
+    if (isNaN(age) || age < 18) {
+        errors.push('Student Age should be at least 18.');
+    }
+
+    // If there are validation errors, render the form with error messages
+    if (errors.length > 0) {
+        return res.render('addStudent', {
+            errors,
+            sid,
+            name,
+            age
+        });
+    }
+
+    // Check if the student ID already exists
+    mySQLDAO.getStudentById(sid)
+        .then((existingStudent) => {
+            if (existingStudent) {
+                errors.push(`Student with ID ${sid} already exists.`);
+                return res.render('addStudent', {
+                    errors,
+                    sid,
+                    name,
+                    age
+                });
+            } else {
+                // if stdent doesnt exist continues with adding
+                return mySQLDAO.addStudent(sid, name, age)
+                    .then(() => {
+                        res.redirect('/students');
+                    });
+            }
+        })
+        .catch((error) => {
+            // Error handling
+            res.send(error.message);
+        });
+});
+
+

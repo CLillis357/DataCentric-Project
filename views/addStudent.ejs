@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Add Student</title>
+</head>
+<body>
+    <h1>Add Student</h1>
+    <% if (errors && errors.length > 0) { %>
+        <ul style="color: red;">
+            <% errors.forEach(error => { %>
+                <li><%= error %></li>
+            <% }); %>
+        </ul>
+    <% } %>
+    <form action="/students/add" method="POST">
+        <label>Student ID: <input type="text" name="sid" value="<%= sid || '' %>" required /></label><br/>
+        <label>Name: <input type="text" name="name" value="<%= name || '' %>" required /></label><br/>
+        <label>Age: <input type="number" name="age" value="<%= age || '' %>" required /></label><br/>
+        <button type="submit">Add</button>
+    </form>
+    <a href="/students">Back to Students</a>
+</body>
+</html>

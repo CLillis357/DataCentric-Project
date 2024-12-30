@@ -28,8 +28,13 @@ function updateStudent(sid, name, age) {
     return pool.query('UPDATE student SET name = ?, age = ? WHERE sid = ?', [name, age, sid]);
 }
 
+function addStudent(sid, name, age) {
+    return pool.query('INSERT INTO student (sid, name, age) VALUES (?, ?, ?)', [sid, name, age]);
+}
+
 module.exports = {
     getStudents,
     getStudentById,
-    updateStudent
+    updateStudent,
+    addStudent
 };
