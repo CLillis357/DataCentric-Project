@@ -32,9 +32,14 @@ function addStudent(sid, name, age) {
     return pool.query('INSERT INTO student (sid, name, age) VALUES (?, ?, ?)', [sid, name, age]);
 }
 
+function deleteStudent(sid) {
+    return pool.query('DELETE FROM student WHERE sid = ?', [sid]);
+}
+
 module.exports = {
     getStudents,
     getStudentById,
     updateStudent,
-    addStudent
+    addStudent,
+    deleteStudent
 };

@@ -117,4 +117,20 @@ app.post('/students/add', (req, res) => {
         });
 });
 
+//DELETE STUDENT(innovation)
+app.get('/students/delete/:sid', (req, res) => {
+    const { sid } = req.params;
+
+    mySQLDAO.deleteStudent(sid)
+        .then(() => {
+            // Redirect to the students page after deletion
+            res.redirect('/students'); 
+        })
+        .catch((error) => {
+            res.send(`Error deleting student: ${error.message}`);
+        });
+});
+
+
+
 
